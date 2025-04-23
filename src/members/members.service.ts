@@ -13,9 +13,21 @@ import { Prisma } from '@prisma/client';
 export class MembersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // TODO: 🔥Implement it yourself
-  create(createMemberDto: CreateMemberDto) {
-    return 'This action stores a new member';
+  async create(createMemberDto: CreateMemberDto) {
+    try {
+      await this.prisma.member.create({
+        data: createMemberDto,
+      });
+
+      return {
+        message: 'Successfully created member'
+      }
+    } catch (error) {
+      throw new InternalServerErrorException({
+        message: 'Failed to create member',
+        error: error.message || 'Unexpected error occured',
+      });
+    }
   }
 
   async findAll() {
